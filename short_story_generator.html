@@ -1,0 +1,283 @@
+
+<style>
+:root{--am:#BA7517;--am-dk:#633806;--am-lt:rgba(186,117,23,0.08);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+#app{font-family:var(--font-serif);color:var(--color-text-primary);min-height:480px;}
+.ph{animation:si 0.4s ease;padding:1.5rem 0;}
+@keyframes si{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pu{0%,100%{opacity:0.25}50%{opacity:1}}
+.plb{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:.6rem;font-family:var(--font-sans);}
+.ptl{font-size:28px;font-weight:500;margin-bottom:.2rem;line-height:1.2;font-family:var(--font-serif);}
+.psb{font-size:14px;color:var(--color-text-secondary);font-style:italic;margin-bottom:1.4rem;}
+.dv{width:44px;height:1.5px;background:var(--am);margin:.6rem 0 1.4rem;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;cursor:pointer;transition:border-color .15s,background .15s;}
+.card:hover{border-color:var(--am);}
+.card.sel{border-color:var(--am);background:var(--am-lt);}
+.cd{width:8px;height:8px;border-radius:50%;margin-bottom:10px;}
+.cl{font-size:15px;font-weight:500;margin-bottom:3px;font-family:var(--font-serif);}
+.cds{font-size:12px;color:var(--color-text-secondary);font-style:italic;}
+.acts{display:flex;gap:10px;margin-top:1.4rem;flex-wrap:wrap;}
+button{font-family:var(--font-sans);font-size:14px;padding:10px 20px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;transition:background .15s;font-weight:400;}
+button:hover:not(:disabled){background:var(--color-background-secondary);}
+button.pr{background:var(--am);color:#fff;border-color:var(--am);}
+button.pr:hover:not(:disabled){background:var(--am-dk);border-color:var(--am-dk);}
+button:disabled{opacity:.35;cursor:not-allowed;}
+.tc{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:20px;margin-bottom:11px;}
+.tc.rej{opacity:.25;pointer-events:none;text-decoration:line-through;}
+.tn{font-size:20px;font-weight:500;font-family:var(--font-serif);font-style:italic;margin-bottom:4px;}
+.th{font-size:13px;color:var(--color-text-secondary);font-style:italic;margin-bottom:14px;}
+.tbs{display:flex;gap:8px;}
+.stl{font-size:32px;font-weight:500;font-style:italic;margin-bottom:.35rem;line-height:1.2;font-family:var(--font-serif);}
+.smeta{font-size:11px;color:var(--color-text-tertiary);letter-spacing:.09em;text-transform:uppercase;margin-bottom:1.4rem;font-family:var(--font-sans);}
+.stxt{font-size:16px;line-height:1.9;color:var(--color-text-primary);}
+.stxt p{margin-bottom:1.35em;}
+.stxt p:first-child::first-letter{font-size:54px;float:left;line-height:.8;margin:5px 9px 0 0;color:var(--am-dk);font-weight:500;font-family:var(--font-serif);}
+hr.dv{border:none;border-top:.5px solid var(--color-border-tertiary);width:100%;height:auto;margin:1.4rem 0;}
+.gc{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:340px;gap:1.2rem;text-align:center;}
+.gd{font-size:30px;letter-spacing:6px;color:var(--am);animation:pu 1.4s ease-in-out infinite;font-family:var(--font-serif);}
+.gt{font-size:18px;font-style:italic;color:var(--color-text-secondary);}
+.mc{display:flex;align-items:center;gap:14px;background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:10px;cursor:pointer;transition:border-color .15s;}
+.mc:hover,.mc.sel{border-color:var(--am);}
+.mi{width:38px;height:38px;border-radius:var(--border-radius-md);background:var(--am-lt);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:.5px solid rgba(186,117,23,0.25);}
+.ml{font-size:15px;font-weight:500;margin-bottom:2px;font-family:var(--font-serif);}
+.md{font-size:12px;color:var(--color-text-secondary);font-style:italic;}
+.yf{width:100%;aspect-ratio:16/9;border-radius:var(--border-radius-lg);border:.5px solid var(--color-border-tertiary);overflow:hidden;margin:1rem 0;}
+.yf iframe{width:100%;height:100%;border:none;display:block;}
+.ntc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 16px;font-size:14px;color:var(--color-text-secondary);margin:1.2rem 0;font-style:italic;border-left:2px solid var(--am);}
+.err{color:var(--color-text-danger);font-size:13px;font-style:italic;margin:.5rem 0;}
+.np{font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-sans);margin-bottom:1.2rem;}
+a.yl{color:var(--am-dk);text-decoration:underline;}
+</style>
+
+<h2 class="sr-only">Short story generator — select your mood and genre to receive a personalized story with matching music</h2>
+<div id="app"></div>
+
+<script>
+const MOODS=[
+  {id:'melancholic',label:'Melancholic',desc:'Heavy hearted, bittersweet',color:'#7B93A8'},
+  {id:'joyful',label:'Joyful',desc:'Warm, light and alive',color:'#E8B84B'},
+  {id:'mysterious',label:'Mysterious',desc:'Shadowed and curious',color:'#8B6FCB'},
+  {id:'tense',label:'Tense',desc:'Breathless, edge of seat',color:'#C9534F'},
+  {id:'romantic',label:'Romantic',desc:'Tender, longing, beautiful',color:'#D4768A'},
+  {id:'nostalgic',label:'Nostalgic',desc:'Distant and golden',color:'#C2936A'},
+];
+const GENRES=[
+  {id:'thriller',label:'Thriller',desc:'Dark tension and danger'},
+  {id:'romance',label:'Romance',desc:'Love and longing'},
+  {id:'sci-fi',label:'Sci-fi',desc:'Future and the unknown'},
+  {id:'fantasy',label:'Fantasy',desc:'Magic and other worlds'},
+  {id:'horror',label:'Horror',desc:'Fear and the dark'},
+  {id:'slice of life',label:'Slice of life',desc:'Real, quiet moments'},
+];
+const MX={
+  melancholic:[
+    {label:'Sad piano',desc:'Quiet keys for a heavy heart',icon:'♩',v:'GcNkPJ_JZRM'},
+    {label:'Rain and strings',desc:'Melancholic orchestral swells',icon:'♬',v:'DWcJFNfaw9c'},
+    {label:'Slow lo-fi',desc:'Hushed beats for the soul',icon:'♪',v:'jfKfPfyJRdk'},
+  ],
+  joyful:[
+    {label:'Sunny lo-fi',desc:'Light beats for bright days',icon:'♩',v:'5qap5aO4i9A'},
+    {label:'Upbeat acoustic',desc:'Warm guitar energy',icon:'♬',v:'36YnV9STBqc'},
+    {label:'Feel-good jazz',desc:'Swingy and cheerful',icon:'♪',v:'Dx5qFachd3A'},
+  ],
+  mysterious:[
+    {label:'Dark ambient',desc:'Shadowed, unknown depths',icon:'♩',v:'HZlkeMKHraE'},
+    {label:'Noir jazz',desc:'Smoky detective vibes',icon:'♬',v:'4To1TMeHFD4'},
+    {label:'Gothic strings',desc:'Eerie cinematic tension',icon:'♪',v:'n61ULEU7CO0'},
+  ],
+  tense:[
+    {label:'Thriller pulse',desc:'Racing heartbeat rhythms',icon:'♩',v:'HY_sPdO0bNg'},
+    {label:'Epic orchestral',desc:'Dramatic, intense',icon:'♬',v:'h19PnSW1bwM'},
+    {label:'Electronic tension',desc:'Cold, sharp and urgent',icon:'♪',v:'L_jWHffIx5E'},
+  ],
+  romantic:[
+    {label:'Romantic piano',desc:'Tender keys, tender heart',icon:'♩',v:'7JdTHAzVr7U'},
+    {label:'Warm jazz',desc:'Candlelit dinner jazz',icon:'♬',v:'Dx5qFachd3A'},
+    {label:'Acoustic serenade',desc:'Soft guitar love song',icon:'♪',v:'36YnV9STBqc'},
+  ],
+  nostalgic:[
+    {label:'Vintage lo-fi',desc:'Crackling tape, golden days',icon:'♩',v:'jfKfPfyJRdk'},
+    {label:'80s synthwave',desc:'Neon memories and nostalgia',icon:'♬',v:'4xDzrJKXOOY'},
+    {label:'Cafe jazz',desc:'Old coffee shop sounds',icon:'♪',v:'Dx5qFachd3A'},
+  ],
+};
+
+let S={phase:'mood',mood:null,genre:null,data:null,rej:[],title:null,music:null,err:null};
+
+function set(u){Object.assign(S,u);render();}
+
+function render(){
+  const app=document.getElementById('app');
+  const fn={mood:rMood,genre:rGenre,gen:rGen,titles:rTitles,story:rStory,music:rMusic,player:rPlayer};
+  app.innerHTML=(fn[S.phase]||rMood)();
+  document.querySelectorAll('[data-a]').forEach(el=>el.addEventListener('click',handle));
+}
+
+function rMood(){
+  return`<div class="ph">
+  <p class="plb">A story for every soul</p>
+  <h1 class="ptl">How are you feeling?</h1>
+  <p class="psb">Your mood shapes the world we'll build together.</p>
+  <div class="dv"></div>
+  <div class="grid">${MOODS.map(m=>`<div class="card${S.mood?.id===m.id?' sel':''}" data-a="mood" data-id="${m.id}">
+    <div class="cd" style="background:${m.color}"></div>
+    <div class="cl">${m.label}</div><div class="cds">${m.desc}</div>
+  </div>`).join('')}</div>
+  <div class="acts"><button class="pr" data-a="to-genre"${!S.mood?' disabled':''}>Continue &rarr;</button></div>
+</div>`;
+}
+
+function rGenre(){
+  return`<div class="ph">
+  <p class="plb">${S.mood?.label}</p>
+  <h1 class="ptl">Choose your genre</h1>
+  <p class="psb">What kind of story calls to you tonight?</p>
+  <div class="dv"></div>
+  ${S.err?`<p class="err">${S.err}</p>`:''}
+  <div class="grid">${GENRES.map(g=>`<div class="card${S.genre?.id===g.id?' sel':''}" data-a="genre" data-id="${g.id}">
+    <div class="cd" style="background:var(--am)"></div>
+    <div class="cl">${g.label}</div><div class="cds">${g.desc}</div>
+  </div>`).join('')}</div>
+  <div class="acts">
+    <button data-a="to-mood">&larr; Back</button>
+    <button class="pr" data-a="gen"${!S.genre?' disabled':''}>Write my story &rarr;</button>
+  </div>
+</div>`;
+}
+
+function rGen(){
+  return`<div class="ph"><div class="gc">
+  <div style="font-size:36px;font-family:var(--font-serif);color:var(--am);animation:pu 2s ease-in-out infinite;">✦</div>
+  <p class="gt">Weaving your ${S.mood?.label.toLowerCase()} ${S.genre?.label.toLowerCase()} tale...</p>
+  <div class="gd">· · ·</div>
+</div></div>`;
+}
+
+function rTitles(){
+  const ts=S.data?.titles||[];
+  const all=S.rej.length===ts.length;
+  return`<div class="ph">
+  <p class="plb">Your story is ready</p>
+  <h1 class="ptl">Choose a title</h1>
+  <p class="psb">Accept one that speaks to you — or dismiss what doesn't.</p>
+  <div class="dv"></div>
+  ${all?`<div style="text-align:center;padding:2rem 0">
+    <p style="font-style:italic;color:var(--color-text-secondary);margin-bottom:1rem;">All titles dismissed. Shall we try again?</p>
+    <button class="pr" data-a="regen">Generate new titles</button>
+  </div>`:ts.map((t,i)=>`<div class="tc${S.rej.includes(i)?' rej':''}">
+    <div class="tn">"${t.title}"</div>
+    <div class="th">${t.tagline}</div>
+    ${!S.rej.includes(i)?`<div class="tbs">
+      <button class="pr" data-a="acc" data-i="${i}">Accept this title</button>
+      <button data-a="rej" data-i="${i}">Dismiss &times;</button>
+    </div>`:''}
+  </div>`).join('')}
+</div>`;
+}
+
+function rStory(){
+  const ps=(S.data?.story||'').split('\n\n').filter(p=>p.trim());
+  return`<div class="ph">
+  <p class="plb">${S.mood?.label} &middot; ${S.genre?.label}</p>
+  <h1 class="stl">${S.title?.title}</h1>
+  <p class="smeta">${S.title?.tagline}</p>
+  <hr class="dv">
+  <div class="stxt">${ps.map(p=>`<p>${p}</p>`).join('')}</div>
+  <hr class="dv">
+  <div class="ntc">The story is told. Now let it breathe — choose music to carry this moment.</div>
+  <div class="acts">
+    <button class="pr" data-a="to-music">&#9834; Choose music</button>
+    <button data-a="reset">Write another</button>
+  </div>
+</div>`;
+}
+
+function rMusic(){
+  const opts=MX[S.mood?.id]||MX.nostalgic;
+  return`<div class="ph">
+  <p class="plb">Set the mood with music</p>
+  <h1 class="ptl">What do you want to hear?</h1>
+  <p class="psb">Choose the sound that fits your ${S.mood?.label.toLowerCase()} journey.</p>
+  <div class="dv"></div>
+  ${opts.map((m,i)=>`<div class="mc${S.music?.v===m.v?' sel':''}" data-a="music" data-i="${i}">
+    <div class="mi" style="color:var(--am-dk);">${m.icon}</div>
+    <div><div class="ml">${m.label}</div><div class="md">${m.desc}</div></div>
+  </div>`).join('')}
+  <div class="acts">
+    <button data-a="to-story">&larr; Back to story</button>
+    <button class="pr" data-a="to-player"${!S.music?' disabled':''}>Play music &rarr;</button>
+  </div>
+</div>`;
+}
+
+function rPlayer(){
+  const ps=(S.data?.story||'').split('\n\n').filter(p=>p.trim());
+  const ytS=`https://www.youtube.com/embed/${S.music?.v}?autoplay=1&rel=0`;
+  const ytO=`https://www.youtube.com/watch?v=${S.music?.v}`;
+  return`<div class="ph">
+  <p class="plb">Now playing</p>
+  <h1 class="ptl" style="font-size:22px;font-style:normal;">${S.music?.label}</h1>
+  <p class="psb">${S.music?.desc}</p>
+  <div class="yf"><iframe src="${ytS}" allow="autoplay;encrypted-media" allowfullscreen title="Story music"></iframe></div>
+  <p class="np">If the player doesn't autoplay, <a class="yl" href="${ytO}" onclick="openLink('${ytO}');return false;">open in YouTube &rarr;</a></p>
+  <hr class="dv">
+  <p class="plb">${S.mood?.label} &middot; ${S.genre?.label}</p>
+  <h2 class="stl" style="font-size:26px;">${S.title?.title}</h2>
+  <p style="font-size:12px;color:var(--color-text-tertiary);font-style:italic;margin-bottom:1.4rem;">${S.title?.tagline}</p>
+  <div class="stxt">${ps.map(p=>`<p>${p}</p>`).join('')}</div>
+  <div class="acts" style="margin-top:1.8rem;">
+    <button data-a="to-music">&larr; Change music</button>
+    <button data-a="reset">Write another story</button>
+  </div>
+</div>`;
+}
+
+async function genStory(){
+  set({phase:'gen',err:null});
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:'You are a creative short story writer. Respond ONLY with valid JSON — no markdown, no code fences, no preamble.',
+        messages:[{role:'user',content:`Write a ${S.mood.label.toLowerCase()} ${S.genre.label.toLowerCase()} short story of about 400 words. Return ONLY this exact JSON structure:
+{
+  "titles": [
+    {"title": "...", "tagline": "compelling one-line hook"},
+    {"title": "...", "tagline": "compelling one-line hook"},
+    {"title": "...", "tagline": "compelling one-line hook"}
+  ],
+  "story": "full story with paragraph breaks using \\n\\n"
+}`}]
+      })
+    });
+    const d=await r.json();
+    const txt=d.content[0].text.replace(/\`\`\`json|\`\`\`/g,'').trim();
+    const p=JSON.parse(txt);
+    set({data:p,phase:'titles',rej:[]});
+  }catch(e){
+    set({phase:'genre',err:'The quill slipped — please try again.'});
+  }
+}
+
+function handle(e){
+  const el=e.currentTarget,a=el.dataset.a;
+  if(a==='mood') set({mood:MOODS.find(m=>m.id===el.dataset.id)});
+  else if(a==='genre') set({genre:GENRES.find(g=>g.id===el.dataset.id)});
+  else if(a==='to-genre') set({phase:'genre'});
+  else if(a==='to-mood') set({phase:'mood'});
+  else if(a==='gen'||a==='regen') genStory();
+  else if(a==='acc'){const i=+el.dataset.i;set({title:S.data.titles[i],phase:'story'});}
+  else if(a==='rej'){const i=+el.dataset.i;set({rej:[...S.rej,i]});}
+  else if(a==='to-music') set({phase:'music'});
+  else if(a==='to-story') set({phase:'story'});
+  else if(a==='music'){const opts=MX[S.mood?.id]||MX.nostalgic;set({music:opts[+el.dataset.i]});}
+  else if(a==='to-player') set({phase:'player'});
+  else if(a==='reset') set({phase:'mood',mood:null,genre:null,data:null,rej:[],title:null,music:null,err:null});
+}
+
+render();
+</script>
