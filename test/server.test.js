@@ -20,4 +20,16 @@ test('POST /api/story returns fallback payload when no API key configured', asyn
   assert.equal(res.status, 200);
   assert.ok(Array.isArray(res.body.titles));
   assert.ok(typeof res.body.story === 'string' && res.body.story.length > 0);
+ codex/implement-short-story-generator-steps-dd268c
+  assert.equal(res.body.source, 'fallback-no-key');
+});
+
+test('POST /api/story rate limits after burst traffic', async () => {
+  for (let i = 0; i < 30; i += 1) {
+    const res = await request(app).post('/api/story').send({ mood: 'joyful', genre: 'fantasy' });
+    assert.equal(res.status, 200);
+  }
+  const limited = await request(app).post('/api/story').send({ mood: 'joyful', genre: 'fantasy' });
+  assert.equal(limited.status, 429);
+ main
 });
