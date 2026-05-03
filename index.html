@@ -236,31 +236,40 @@ function rPlayer(){
 async function genStory(){
   set({phase:'gen',err:null});
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
+    const r=await fetch('/api/story',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:'You are a creative short story writer. Respond ONLY with valid JSON — no markdown, no code fences, no preamble.',
-        messages:[{role:'user',content:`Write a ${S.mood.label.toLowerCase()} ${S.genre.label.toLowerCase()} short story of about 400 words. Return ONLY this exact JSON structure:
-{
-  "titles": [
-    {"title": "...", "tagline": "compelling one-line hook"},
-    {"title": "...", "tagline": "compelling one-line hook"},
-    {"title": "...", "tagline": "compelling one-line hook"}
-  ],
-  "story": "full story with paragraph breaks using \\n\\n"
-}`}]
-      })
+      body:JSON.stringify({mood:S.mood?.id,genre:S.genre?.id})
     });
-    const d=await r.json();
-    const txt=d.content[0].text.replace(/\`\`\`json|\`\`\`/g,'').trim();
-    const p=JSON.parse(txt);
+    if(!r.ok) throw new Error('Story API request failed');
+    const p=await r.json();
+    if(!Array.isArray(p.titles)||!p.story) throw new Error('Invalid story payload');
     set({data:p,phase:'titles',rej:[]});
   }catch(e){
-    set({phase:'genre',err:'The quill slipped — please try again.'});
+    const fb=buildFallbackStory();
+    set({data:fb,phase:'titles',rej:[],err:null});
   }
+}
+
+function buildFallbackStory(){
+  const mood=S.mood?.label||'Mysterious';
+  const genre=S.genre?.label||'Fantasy';
+  return {
+    titles:[
+      {title:`The ${mood} Echo`,tagline:`A ${genre.toLowerCase()} path opens where memory lingers.`},
+      {title:`Between Lanterns`,tagline:`A heart-led ${genre.toLowerCase()} journey through uncertain light.`},
+      {title:`When Night Hums`,tagline:`A quiet choice changes everything before dawn.`},
+    ],
+    story:`At dusk, the town looked ordinary, but ordinary things had a way of shifting when someone listened closely enough.\n\nMara paused beneath the station clock, fingers wrapped around a paper note she did not remember writing. The ink was hers; the message was not: Follow the second song.\n\nA violin floated from an alley cafe, thin and bright as thread. She followed it through narrow streets where shop windows reflected a younger version of her, one who still believed every wrong turn could become a beginning.\n\nAt the riverwalk, a stranger waited beside a lantern boat. He held out a hand as if they had arranged this years ago. “You can keep what you know,” he said, “or trade it for what you need.”\n\nMara looked at the dark water. In its surface she saw her careful life: safe, polished, and quietly incomplete. Beyond the bridge, lights flickered like promises.\n\nShe stepped into the boat. It rocked once, then steadied. The city receded into a soft glow while the current carried her toward a horizon that smelled of rain and possibility.\n\nBy the time dawn brushed the rooftops gold, she understood the note was never a warning. It was permission — to become someone brave enough to choose wonder while fear still whispered.`,
+  };
+}
+
+function openLink(url){
+  if(window?.open){
+    window.open(url,'_blank','noopener,noreferrer');
+    return;
+  }
+  window.location.href=url;
 }
 
 function handle(e){
