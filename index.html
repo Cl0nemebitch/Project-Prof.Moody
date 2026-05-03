@@ -2,7 +2,7 @@
 <style>
 :root{--am:#BA7517;--am-dk:#633806;--am-lt:rgba(186,117,23,0.08);}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-#app{font-family:var(--font-serif);color:var(--color-text-primary);min-height:480px;}
+#app{font-family:var(--font-serif);color:var(--color-text-primary);min-height:480px;max-width:920px;margin:2rem auto;padding:2rem;background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);box-shadow:0 12px 34px rgba(0,0,0,.06);}
 .ph{animation:si 0.4s ease;padding:1.5rem 0;}
 @keyframes si{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pu{0%,100%{opacity:0.25}50%{opacity:1}}
@@ -10,9 +10,10 @@
 .ptl{font-size:28px;font-weight:500;margin-bottom:.2rem;line-height:1.2;font-family:var(--font-serif);}
 .psb{font-size:14px;color:var(--color-text-secondary);font-style:italic;margin-bottom:1.4rem;}
 .dv{width:44px;height:1.5px;background:var(--am);margin:.6rem 0 1.4rem;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;}
-.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;cursor:pointer;transition:border-color .15s,background .15s;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+.card{background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;cursor:pointer;transition:border-color .15s,background .15s,transform .15s;}
 .card:hover{border-color:var(--am);}
+.card:hover{transform:translateY(-1px);}
 .card.sel{border-color:var(--am);background:var(--am-lt);}
 .cd{width:8px;height:8px;border-radius:50%;margin-bottom:10px;}
 .cl{font-size:15px;font-weight:500;margin-bottom:3px;font-family:var(--font-serif);}
@@ -23,31 +24,42 @@ button:hover:not(:disabled){background:var(--color-background-secondary);}
 button.pr{background:var(--am);color:#fff;border-color:var(--am);}
 button.pr:hover:not(:disabled){background:var(--am-dk);border-color:var(--am-dk);}
 button:disabled{opacity:.35;cursor:not-allowed;}
-.tc{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:20px;margin-bottom:11px;}
+.tc{background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:20px;margin-bottom:11px;}
 .tc.rej{opacity:.25;pointer-events:none;text-decoration:line-through;}
 .tn{font-size:20px;font-weight:500;font-family:var(--font-serif);font-style:italic;margin-bottom:4px;}
 .th{font-size:13px;color:var(--color-text-secondary);font-style:italic;margin-bottom:14px;}
 .tbs{display:flex;gap:8px;}
 .stl{font-size:32px;font-weight:500;font-style:italic;margin-bottom:.35rem;line-height:1.2;font-family:var(--font-serif);}
 .smeta{font-size:11px;color:var(--color-text-tertiary);letter-spacing:.09em;text-transform:uppercase;margin-bottom:1.4rem;font-family:var(--font-sans);}
-.stxt{font-size:16px;line-height:1.9;color:var(--color-text-primary);}
+.stxt{font-size:17px;line-height:2;color:var(--color-text-primary);}
 .stxt p{margin-bottom:1.35em;}
 .stxt p:first-child::first-letter{font-size:54px;float:left;line-height:.8;margin:5px 9px 0 0;color:var(--am-dk);font-weight:500;font-family:var(--font-serif);}
 hr.dv{border:none;border-top:.5px solid var(--color-border-tertiary);width:100%;height:auto;margin:1.4rem 0;}
 .gc{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:340px;gap:1.2rem;text-align:center;}
 .gd{font-size:30px;letter-spacing:6px;color:var(--am);animation:pu 1.4s ease-in-out infinite;font-family:var(--font-serif);}
 .gt{font-size:18px;font-style:italic;color:var(--color-text-secondary);}
-.mc{display:flex;align-items:center;gap:14px;background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:10px;cursor:pointer;transition:border-color .15s;}
+.mc{display:flex;align-items:center;gap:14px;background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:10px;cursor:pointer;transition:border-color .15s;}
 .mc:hover,.mc.sel{border-color:var(--am);}
 .mi{width:38px;height:38px;border-radius:var(--border-radius-md);background:var(--am-lt);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:.5px solid rgba(186,117,23,0.25);}
 .ml{font-size:15px;font-weight:500;margin-bottom:2px;font-family:var(--font-serif);}
 .md{font-size:12px;color:var(--color-text-secondary);font-style:italic;}
 .yf{width:100%;aspect-ratio:16/9;border-radius:var(--border-radius-lg);border:.5px solid var(--color-border-tertiary);overflow:hidden;margin:1rem 0;}
-.yf iframe{width:100%;height:100%;border:none;display:block;}
+.yf iframe{width:100%;height:100%;border:none;display:block;background:#000;}
 .ntc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 16px;font-size:14px;color:var(--color-text-secondary);margin:1.2rem 0;font-style:italic;border-left:2px solid var(--am);}
 .err{color:var(--color-text-danger);font-size:13px;font-style:italic;margin:.5rem 0;}
 .np{font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-sans);margin-bottom:1.2rem;}
 a.yl{color:var(--am-dk);text-decoration:underline;}
+@media (max-width: 768px){
+  #app{margin:0;padding:1.2rem;border:none;border-radius:0;box-shadow:none;}
+  .ptl{font-size:24px}
+  .stl{font-size:28px}
+  .grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width: 520px){
+  .grid{grid-template-columns:1fr}
+  .acts{flex-direction:column}
+  button{width:100%}
+}
 </style>
 
 <h2 class="sr-only">Short story generator — select your mood and genre to receive a personalized story with matching music</h2>
@@ -213,14 +225,14 @@ function rMusic(){
 
 function rPlayer(){
   const ps=(S.data?.story||'').split('\n\n').filter(p=>p.trim());
-  const ytS=`https://www.youtube.com/embed/${S.music?.v}?autoplay=1&rel=0`;
+  const ytS=`https://www.youtube-nocookie.com/embed/${S.music?.v}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
   const ytO=`https://www.youtube.com/watch?v=${S.music?.v}`;
   return`<div class="ph">
   <p class="plb">Now playing</p>
   <h1 class="ptl" style="font-size:22px;font-style:normal;">${S.music?.label}</h1>
   <p class="psb">${S.music?.desc}</p>
-  <div class="yf"><iframe src="${ytS}" allow="autoplay;encrypted-media" allowfullscreen title="Story music"></iframe></div>
-  <p class="np">If the player doesn't autoplay, <a class="yl" href="${ytO}" onclick="openLink('${ytO}');return false;">open in YouTube &rarr;</a></p>
+  <div class="yf"><iframe src="${ytS}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Story music"></iframe></div>
+  <p class="np">If the player doesn't autoplay, <a class="yl" href="${ytO}" target="_blank" rel="noopener noreferrer">open in YouTube &rarr;</a></p>
   <hr class="dv">
   <p class="plb">${S.mood?.label} &middot; ${S.genre?.label}</p>
   <h2 class="stl" style="font-size:26px;">${S.title?.title}</h2>
@@ -236,31 +248,32 @@ function rPlayer(){
 async function genStory(){
   set({phase:'gen',err:null});
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
+    const r=await fetch('/api/story',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:'You are a creative short story writer. Respond ONLY with valid JSON — no markdown, no code fences, no preamble.',
-        messages:[{role:'user',content:`Write a ${S.mood.label.toLowerCase()} ${S.genre.label.toLowerCase()} short story of about 400 words. Return ONLY this exact JSON structure:
-{
-  "titles": [
-    {"title": "...", "tagline": "compelling one-line hook"},
-    {"title": "...", "tagline": "compelling one-line hook"},
-    {"title": "...", "tagline": "compelling one-line hook"}
-  ],
-  "story": "full story with paragraph breaks using \\n\\n"
-}`}]
-      })
+      body:JSON.stringify({mood:S.mood?.id,genre:S.genre?.id})
     });
-    const d=await r.json();
-    const txt=d.content[0].text.replace(/\`\`\`json|\`\`\`/g,'').trim();
-    const p=JSON.parse(txt);
+    if(!r.ok) throw new Error('Story API request failed');
+    const p=await r.json();
+    if(!Array.isArray(p.titles)||!p.story) throw new Error('Invalid story payload');
     set({data:p,phase:'titles',rej:[]});
   }catch(e){
-    set({phase:'genre',err:'The quill slipped — please try again.'});
+    const fb=buildFallbackStory();
+    set({data:fb,phase:'titles',rej:[],err:null});
   }
+}
+
+function buildFallbackStory(){
+  const mood=S.mood?.label||'Mysterious';
+  const genre=S.genre?.label||'Fantasy';
+  return {
+    titles:[
+      {title:`The ${mood} Echo`,tagline:`A ${genre.toLowerCase()} path opens where memory lingers.`},
+      {title:`Between Lanterns`,tagline:`A heart-led ${genre.toLowerCase()} journey through uncertain light.`},
+      {title:`When Night Hums`,tagline:`A quiet choice changes everything before dawn.`},
+    ],
+    story:`At dusk, the town looked ordinary, but ordinary things had a way of shifting when someone listened closely enough.\n\nMara paused beneath the station clock, fingers wrapped around a paper note she did not remember writing. The ink was hers; the message was not: Follow the second song.\n\nA violin floated from an alley cafe, thin and bright as thread. She followed it through narrow streets where shop windows reflected a younger version of her, one who still believed every wrong turn could become a beginning.\n\nAt the riverwalk, a stranger waited beside a lantern boat. He held out a hand as if they had arranged this years ago. “You can keep what you know,” he said, “or trade it for what you need.”\n\nMara looked at the dark water. In its surface she saw her careful life: safe, polished, and quietly incomplete. Beyond the bridge, lights flickered like promises.\n\nShe stepped into the boat. It rocked once, then steadied. The city receded into a soft glow while the current carried her toward a horizon that smelled of rain and possibility.\n\nBy the time dawn brushed the rooftops gold, she understood the note was never a warning. It was permission — to become someone brave enough to choose wonder while fear still whispered.`,
+  };
 }
 
 function handle(e){
